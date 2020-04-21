@@ -14,6 +14,8 @@ export async function getTodos(idToken: string): Promise<Todo[]> {
     },
   })
   console.log('Todos:', response.data)
+  console.log('Response:', response)
+  
   return response.data.items
 }
 
@@ -27,6 +29,7 @@ export async function createTodo(
       'Authorization': `Bearer ${idToken}`
     }
   })
+  console.log('TODO: remove: Response.data.item', response.data.item)
   return response.data.item
 }
 
