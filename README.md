@@ -1,5 +1,7 @@
 # Serverless TODO
-## AWS serverless TODO application 
+## API URL
+The project is deployed in AWS Irland region. Below is the URL which you can use to access the api
+https://ewz9olcu6f.execute-api.eu-west-1.amazonaws.com/dev/todos
 
 To implement this project, you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all comments starting with the `TODO:` in the code to find the placeholders that you need to implement.
 
