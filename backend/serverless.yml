@@ -2,25 +2,35 @@ service:
   name: serverless-todo-app
 
 custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Udacity Serverless Application
+        description: Udacity Serverless Application
+    models:
+      - name: CreateTodoRequest
+        contentType: application/json
+        schema: ${file(models/create-todo-model.json)} # reference to your model's json schema file. You can also declare the model inline.
+   
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
 
-#package:
-#  individually: true
-
 plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
+  - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'eu-west-1'}
-  #tracing:
-  #  lambda: true
-  #  apiGateway: true  
+  tracing:
+    lambda: true
+    apiGateway: true  
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
@@ -60,6 +70,7 @@ functions:
           - "xray:PutTelemetryRecords"
         Resource:
           - "*"
+  
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -68,6 +79,9 @@ functions:
           path: todos
           authorizer: Auth
           cors: true
+          documentation:
+            summary: Create a new todo task
+            description: Create a todo task
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -165,7 +179,7 @@ functions:
           - "xray:PutTraceSegments"
           - "xray:PutTelemetryRecords"
         Resource:
-          - "*"
+          - "*"      
 
 resources:
   Resources:

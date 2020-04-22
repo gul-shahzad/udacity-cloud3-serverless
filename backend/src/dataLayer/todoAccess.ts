@@ -2,14 +2,15 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
 import { TodoUpdate } from '../models/TodoUpdate'
+import * as AWS from 'aws-sdk'
 //import { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } from 'constants'
 const AWSXRay = require('aws-xray-sdk');
-//const XAWS = AWSXRay.captureAWS(AWS)
+const XAWS = AWSXRay.captureAWS(AWS)
 
 
 const logger = createLogger('createTodo')
 
-const s3 = new AWSXRay.S3({
+const s3 = new XAWS.S3({
     signatureVersion: 'v4'
 })
 
@@ -18,7 +19,7 @@ const urlExpireation = process.env.SIGNED_URL_EXPIRATION
 export class TodoAccess{
 
     constructor(
-        private readonly docClient: DocumentClient = new AWSXRay.DynamoDB.DocumentClient(),
+        private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly todosTable = process.env.TODOS_TABLE,
         private readonly bucketName = process.env.IMAGES_S3_BUCKET,
         ){
